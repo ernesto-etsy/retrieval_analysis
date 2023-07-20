@@ -11,7 +11,7 @@ a.query_raw,
 label,
 bin,
 platform,
-CONCAT("https://www.etsy.com/search?q=",a.query_raw,"&ref=search_bar") AS hyperlink,
+CONCAT("https://www.etsy.com/search?q=", REPLACE(a.query_raw, ' ', '%20'), "&ref=search_bar") AS hyperlink,
 AVG(total_listings) AS avg_unique_impressions,
 COUNT(*) AS total_instances
 FROM cte a
@@ -22,3 +22,4 @@ WHERE query_rank = 1
 AND has_click = 0
 GROUP BY 1,2,3,4
 ORDER BY 7 DESC
+LIMIT 10000
