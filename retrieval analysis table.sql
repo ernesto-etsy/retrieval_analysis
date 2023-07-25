@@ -32,6 +32,7 @@ one_day_gms_attribution AS (
   FROM `etsy-data-warehouse-prod.rollups.organic_impressions`
   --two months of data available
   WHERE _date >= '2023-05-13'
+  AND placement = 'search'
   GROUP BY 1,2,3
 ),
 top_categories AS
@@ -53,7 +54,7 @@ c.label,
 d.bin,
 classified_taxonomy_id,
 g.top_category,
-g.full_path
+g.full_path,
 has_click,
 has_cart,
 has_purchase,
@@ -63,7 +64,7 @@ total_seens,
 pages_seen,
 same_day_gms,
 TIMESTAMP_DIFF(b.end_datetime,b.start_datetime,SECOND) / 60.0 visit_duration_in_minutes
-FROM `etsy-data-warehouse-prod.search.query_sessions_all` a
+FROM   a
 INNER JOIN (SELECT browser_id,user_id,visit_id, 
       start_datetime, end_datetime
       FROM `etsy-data-warehouse-prod.weblog.visits`
