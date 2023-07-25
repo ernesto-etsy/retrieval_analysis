@@ -1,3 +1,16 @@
+--Overall (by query)
+SELECT
+MIN(_date) AS start_date,
+MAX(_date) AS end_date,
+COUNT(DISTINCT CONCAT(a.query_raw,a.visit_id)) total_queries,
+AVG(total_listings) AS avg_listings,
+AVG(total_seens) AS avg_listings_seen,
+SUM(same_day_gms) AS total_gms,
+SUM(same_day_gms) / COUNT(DISTINCT CONCAT(a.query_raw,a.visit_id)) AS gms_per_query,
+COUNT(DISTINCT CASE WHEN has_cart = 1  THEN CONCAT(a.query_raw,a.visit_id) ELSE NULL END) / COUNT(DISTINCT CONCAT(a.query_raw,a.visit_id)) AS cart_rate,
+COUNT(DISTINCT CASE WHEN has_click = 0 THEN CONCAT(a.query_raw,a.visit_id) ELSE NULL END) / COUNT(DISTINCT CONCAT(a.query_raw,a.visit_id)) AS pct_no_click_queries,
+FROM `etsy-data-warehouse-dev.ecanales.retrieval_search_data_one_year` a
+WHERE total_listings IS NOT NULL;
 --Buyers (by query)
 SELECT
 (CASE WHEN buyer_segment IS NULL THEN 'No Segment' ELSE buyer_segment END) AS buyer_segment,
